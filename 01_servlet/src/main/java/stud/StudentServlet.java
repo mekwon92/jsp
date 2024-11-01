@@ -12,12 +12,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/Student")
+@WebServlet("/1234")
 public class StudentServlet extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//		resp.setContentType("text/html; charset=utf-8");
+		resp.setContentType("text/html; charset=utf-8");
 		PrintWriter pw = resp.getWriter();
 		pw.println("<body>");
 		pw.println("<h1>안녕세상</h1>");		
@@ -27,6 +27,9 @@ public class StudentServlet extends HttpServlet{
 		CharArrayReader car = new CharArrayReader(new char[] {'가','나'});
 		StringReader sr = new StringReader("가나다라");
 		
+		System.out.println((char)sr.read());
+		System.out.println((char)sr.read());
+		System.out.println((char)sr.read());
 		System.out.println((char)sr.read());
 		
 		

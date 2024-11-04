@@ -13,6 +13,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js" integrity="sha512-7Pi/otdlbbCR+LnW+F7PwFcSDJOuUJB3OxtEHbg4vSMvzvJjde4Po1v4BR9Gdc9aXNUNFVUY+SK51wWT8WF0Gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
@@ -24,7 +25,6 @@
                 <h1 class="text-center fw-bold p-3">더조은 아카데미 UI 구현 게시판 레이아웃</h1>
             </div>
         </header>
-
         <nav class="navbar bg-dark navbar-expand-sm">
             <ul class="navbar-nav container justify-content-start">
                 <li class="mx-5 nav-item"><a class="nav-link text-white" href="index.html">메인페이지</a></li>
@@ -41,75 +41,28 @@
 
             </ul>
         </nav>
-    
         <main class="container">
-            <h1 class="text-center mt-5">회원가입</h1>
-            <form name="frm" method="post" class="mx-auto col-12 col-sm-8 col-md-6 col-lg-5 col-x1-4 col-xxl-3 card p-2 mt-5">
-            <input type="text" class="form-control my-3" id="id" placeholder="아이디" name="id">
-            <input type="password" class="form-control my-3" id="pw" placeholder="비밀번호" name="pw">
-            <input type="text" class="form-control my-3" id="name" placeholder="이름" name="name">
-            <input type="email" class="form-control my-3" id="email" placeholder="이메일" name="email">
-            <input type="text" class="form-control my-3" id="roadAddr" placeholder="" name="roadAddr" readonly>
-            <input type="text" class="form-control my-3" id="detailAddr" placeholder="상세주소" name="detailAddr">
-            <div class="input-group my-3">
-                <input type="text" class="form-control" placeholder="도로명검색">
-                <button class="btn btn-success" type="button" id="search">검색</button>
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="p-3">
+                        <h1>index</h1>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 d-grid gap-2">
+                        <a href="signin.html" class="btn btn-primary btn-block">로그인</a>
+                        <div class="small clearfix">
+                            <a href="signin.html" class="small float-start text-decoration-none">회원가입</a>
+                            <a href="signin.html" class="small float-end text-decoration-none">아이디/비밀번호 찾기</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <ul class="list-group search-result-wrap">
-            </ul>
-
-            <button class="btn btn-primary">가입하기</button>
-        </form>
-
         </main>
         <footer class="bg-warning text-center p-4">
             <address>서울특별시 구로구 디지털로 306 2층 더조은아카데미</address>
             <p>All rights reserved &copy; copyright.</p>
         </footer>
     </div>
-    <script>
-        $("#search").click(function() {
-            const keyword = $(this).prev().val();
-            if(!keyword) return;
-
-            const data = { 
-                keyword,
-                confmKey : 'devU01TX0FVVEgyMDI0MTAyOTEyMTYxNTExNTE5OTc=',
-                currentPage : 1,
-                countPerPage : 100,
-                resultType : 'json'
-             };
-            console.log(data);
-          
-            $.ajax({
-                url : "https://business.juso.go.kr/addrlink/addrLinkApiJsonp.do",
-                type : 'get',
-                data,
-                dataType : 'jsonp',
-                crossDomain : true,
-                success : function(data) {
-                    console.log(data);
-                    console.log(data.results.juso);
-
-                    let str = '';
-                    for(let i in data.results.juso) {
-                        str += `<li class="list-group-item"><a href="#" class="small">
-                        		\${data.results.juso[i].roadAddr}</a></li>`;
-                    }
-                    $("ul.search-result-wrap").html(str);
-                },
-                error : function(xhr, msg) {
-                    console.log(msg);
-                }
-            })
-
-
-            $("ul.search-result-wrap").on("click","a",function() {
-                $("#roadAddr").val($(this).text().trim()); 
-                $(this).closest("ul").empty(); 
-            })
-        });
-    </script>
 </body>
-
 </html>

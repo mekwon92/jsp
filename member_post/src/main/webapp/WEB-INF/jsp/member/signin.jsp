@@ -28,6 +28,11 @@
 		</main>
 	</div>
 	<script>
+	
+	const checked = $("#mySwitch").prop("checked");
+	if($.cookie("rememberMe")&&checked){
+		$.cookie('remember','yes', {expire: 365});
+	}
 		
 	</script>
 </body>

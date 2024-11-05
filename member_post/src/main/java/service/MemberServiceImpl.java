@@ -1,7 +1,6 @@
 package service;
-//dao, service, servlet은 mvc2패턴에서 필수적인....
+//DAO, service, servlet은 mvc2패턴에서 필수적인....
 import java.util.List;
-
 import dao.MemberDao;
 import vo.Member;
 
@@ -15,7 +14,6 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public Member findBy(String id) {
-		
 		return memberDao.selectOne(id);
 	}
 
@@ -42,6 +40,4 @@ public class MemberServiceImpl implements MemberService{
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
-	
 }

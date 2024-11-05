@@ -1,12 +1,15 @@
 package servlet.member;
 
 import java.io.IOException;
+import java.net.HttpCookie;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import service.MemberService;
 import service.MemberServiceImpl;
@@ -34,12 +37,22 @@ public class Signin extends HttpServlet{
 //		service.register(member);
 		
 		if(service.login(id, pw)) {
+			
+			//쿠키 생성
+			Cookie cookie = new Cookie("rememberMe","yes");
+			resp.addCookie(cookie);
+
 			//로그인 성공
-		}
-		else {
+			//세션이 로그인 동안 유지되도록
+			HttpSession session = req.getSession();
+			session.setAttribute("member", service.findBy(id));
+			resp.sendRedirect(req.getContextPath()+"/index"); 
+			//req.getContextPath()+"/" 이것은 프로젝트이름 /member을 기대하는 것
 			
 		}
+		else {
+			resp.sendRedirect("login?msg=fail");
+		}
 		
-		resp.sendRedirect("signin");
 	}
 }

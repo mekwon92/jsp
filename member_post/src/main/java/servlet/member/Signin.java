@@ -1,7 +1,6 @@
 package servlet.member;
 
 import java.io.IOException;
-import java.net.HttpCookie;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,7 +12,6 @@ import javax.servlet.http.HttpSession;
 
 import service.MemberService;
 import service.MemberServiceImpl;
-import vo.Member;
 
 
 @WebServlet("/signin")
@@ -30,26 +28,42 @@ public class Signin extends HttpServlet{
 		req.setCharacterEncoding("utf-8");
 		String id = req.getParameter("id");
 		String pw = req.getParameter("pw");
+		String remember = req.getParameter("remember-id");
 		
+		// if 부분 먼저 지우고 체크 먼저 해보기
 		System.out.println(id);
 		System.out.println(pw);
+		System.out.println(remember);
 	
 //		service.register(member);
 		
-		if(service.login(id, pw)) {
-			
-			//쿠키 생성
-			Cookie cookie = new Cookie("rememberMe","yes");
-			resp.addCookie(cookie);
-
-			//로그인 성공
-			//세션이 로그인 동안 유지되도록
+		//로그인 성공
+		if(service.login(id, pw)) {//null 을 캐스팅하면 nullpointexception 되어서 체크해야됨!
+			//세션이 로그인 동안 유지되도록(무조건 진행)
 			HttpSession session = req.getSession();
 			session.setAttribute("member", service.findBy(id));
-			resp.sendRedirect(req.getContextPath()+"/index"); 
-			//req.getContextPath()+"/" 이것은 프로젝트이름 /member을 기대하는 것
+			//req.getContextPath()+"/" 이것은 프로젝트이름 /member 을 기대하는 것
 			
+			//쿠키에 아이디 기억 여부 처리
+			if(remember != null) {
+				Cookie cookie = new Cookie("remember-id",id);
+				cookie.setMaxAge(60 * 60 * 24 * 7);
+				resp.addCookie(cookie);				
+			}
+			else {
+				// 아이디 기억 안할 때 처리할 일
+				Cookie[] cookies = req.getCookies();
+				for(Cookie c : cookies) {
+					if(c.getName().equals("remember-id")) {
+						c.setMaxAge(0);
+						resp.addCookie(c);
+						break;
+					}
+				}
+			}			
+			resp.sendRedirect(req.getContextPath()+"/index"); 
 		}
+		//로그인 실패
 		else {
 			resp.sendRedirect("login?msg=fail");
 		}

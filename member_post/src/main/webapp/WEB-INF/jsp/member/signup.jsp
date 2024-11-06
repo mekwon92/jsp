@@ -10,18 +10,10 @@
 		<jsp:include page="../common/header.jsp" />
 		<main class="container">
 			<h1 class="text-center mt-5">회원가입</h1>
-			<form name="frm" method="post"
-				class="mx-auto col-12 col-sm-8 col-md-6 col-lg-5 col-x1-4 col-xxl-3 card p-2 mt-5">
-				<input type="text" class="form-control my-3" id="id"
-					placeholder="아이디" name="id"> <input type="password"
-					class="form-control my-3" id="pw" placeholder="비밀번호" name="pw">
-				<input type="text" class="form-control my-3" id="name"
-					placeholder="이름" name="name"> <input type="email"
-					class="form-control my-3" id="email" placeholder="이메일" name="email">
-				<input type="text" class="form-control my-3" id="roadAddr"
-					placeholder="" name="roadAddr" readonly> <input type="text"
-					class="form-control my-3" id="detailAddr" placeholder="상세주소"
-					name="detailAddr">
+			<form name="frm" method="post" class="mx-auto col-12 col-sm-8 col-md-6 col-lg-5 col-x1-4 col-xxl-3 card p-2 mt-5">
+				<input type="text" class="form-control my-3" id="id" placeholder="아이디" name="id"> <input type="password" class="form-control my-3" id="pw" placeholder="비밀번호" name="pw">
+				<input type="text" class="form-control my-3" id="name" placeholder="이름" name="name"> <input type="email" class="form-control my-3" id="email" placeholder="이메일" name="email">
+				<input type="text" class="form-control my-3" id="roadAddr" placeholder="" name="roadAddr" readonly> <input type="text" class="form-control my-3" id="detailAddr" placeholder="상세주소" name="detailAddr">
 				<div class="input-group my-3">
 					<input type="text" class="form-control" placeholder="도로명검색">
 					<button class="btn btn-success" type="button" id="search">검색</button>

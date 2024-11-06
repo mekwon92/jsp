@@ -27,6 +27,10 @@ public class Member {
 		this.regdate = regdate;
 	}
 	
+	public int getNum() {
+		return 10;
+	}
+	
 	public static M builder() {
 	//클래스 로드가 빨라서 인스턴스는 여기에 접근못함
 		return new M();

@@ -42,7 +42,7 @@ public class PostDao {
 
 	}
 
-	private Post selectOne(Long pno) {
+	public Post selectOne(Long pno) {
 		Post post = null;
 		String sql = "select pno, title, writer, content, view_count, regdate, updatedate from tbl_post where pno = ?";
 
@@ -71,7 +71,7 @@ public class PostDao {
 
 	public List<Post> selectList() {
 		List<Post> posts = new ArrayList<>();
-		String sql = "select pno, title, writer, view_count, regdate from tbl_post";
+		String sql = "select pno, title, writer, view_count, regdate from tbl_post order by 1 desc";
 
 		try (Connection conn = DBConn.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			ResultSet rs = pstmt.executeQuery();
@@ -158,7 +158,8 @@ public class PostDao {
 //			dao.insert(Post.builder().writer("mekwon").title("제목 +" + (i + 1)).content("내용").build());			
 //		}
 		//목록조회
-//		dao.selectList().forEach(System.out::println);
+		dao.selectList().forEach(System.out::println);
+		
 		
 		//단일조회
 //		System.out.println(dao.selectOne(6L));
@@ -168,17 +169,17 @@ public class PostDao {
 //		System.out.println(dao.delete(6L));
 	
 		//수정
-		Post post = dao.selectOne(10L);
-		
-		System.out.println(post);
-		
-		post = Post.builder().pno(post.getPno()).title("수정된 제목").content("수정된 내용").build();
-		
-		dao.update(post);
-		
-		post = dao.selectOne(10L);
-		
-		System.out.println(post);
+//		Post post = dao.selectOne(10L);
+//		
+//		System.out.println(post);
+//		
+//		post = Post.builder().pno(post.getPno()).title("수정된 제목").content("수정된 내용").build();
+//		
+//		dao.update(post);
+//		
+//		post = dao.selectOne(10L);
+//		
+//		System.out.println(post);
 	
 	}
 

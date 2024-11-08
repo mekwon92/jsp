@@ -41,6 +41,7 @@ public class PostDao {
 		return 0;
 
 	}
+	
 
 	public Post selectOne(Long pno) {
 		Post post = null;
@@ -116,12 +117,35 @@ public class PostDao {
 			try {
 				pstmt.close();
 				conn.close();
+			} catch (SQLException ignore) {}
+		}
+		return 0;
+	}
+	
+	public int increaseViewCount(Long pno) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			String sql = "update tbl_post set view_count = view_count + 1 where pno = ?";
+
+			conn = DBConn.getConnection();
+			pstmt = conn.prepareStatement(sql);
+
+			int idx = 1;
+			
+			pstmt.setLong(idx++, pno);
+			return pstmt.executeUpdate();
+
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
 			} catch (SQLException ignore) {
 			}
 		}
-
 		return 0;
-
 	}
 
 	public int delete(Long pno) {

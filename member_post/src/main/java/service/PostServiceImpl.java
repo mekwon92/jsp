@@ -22,10 +22,16 @@ public class PostServiceImpl implements PostService{
 	public int remove(Long pno) {
 		return dao.delete(pno);
 	}
-	
+
 	@Override
 	public Post findBy(Long pno) {
 		return dao.selectOne(pno);
+	}
+	
+	@Override
+	public Post view(Long pno) { //부하가 심한 코드임 -> 테이블이 아니라 시퀀스 등으로 처리하거나 nosql로 ...처리?
+		dao.increaseViewCount(pno);
+		return findBy(pno);
 	}
 	
 	@Override

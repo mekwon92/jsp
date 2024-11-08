@@ -15,6 +15,8 @@ public interface PostService {
 
 	//pno로 부터 post(목적어)를 찾음 i find post by pno.
 	Post findBy(Long pno);
+
+	Post view(Long pno);
 	
 	List<Post> list();
 }

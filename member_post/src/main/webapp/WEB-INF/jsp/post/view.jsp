@@ -9,6 +9,9 @@
 	<div class='wrap'>
 		<jsp:include page="../common/header.jsp" />
 		<main class="container">
+			 <div class="clearfix py-4">
+				<h2 class="float-start">Post View</h2>
+			 </div>
 			 <div class="my-3 col-md-9 mx-auto">
                 <label for="title" class="form-label mt-3"><i class="fa-solid fa-t text-primary"></i><b> Title</b></label>
                 <input type="text" class="form-control" id="title" placeholder="title" name="title" value="${post.title}" disabled>

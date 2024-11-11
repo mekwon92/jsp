@@ -5,11 +5,17 @@ import lombok.Data;
 @Data
 public class PageDto {
 	private Criteria cri;
-	private int total;
-	private int startPage;
-	private int endPage;
+	private int total;//게시글 총량
+	private int startPage;//페이지 버튼 시작 번호
+	private int endPage; //페이지 버튼 종료 번호
 	
-	private int pageCount;
+	private int pageCount;//페이지 버튼 개수
+	
+	// 이전 이후 계산용 필드
+	private boolean prev;
+	private boolean next;
+	private boolean doublePrev;
+	private boolean doubleNext;
 	
 	public PageDto(int total) {
 		this(new Criteria(), total);
@@ -24,12 +30,11 @@ public class PageDto {
 		this.cri = cri;
 		this.total = total;
 		this.pageCount = pageCount;
-			
 		endPage = (cri.getPage() + pageCount - 1) / pageCount * pageCount ; //밑에 보여주는..
 		startPage = endPage - pageCount + 1;
 		
 		int realEnd = (total + cri.getAmount() - 1) / cri.getAmount();
-		System.out.println(realEnd);
+//		System.out.println(realEnd);
 		//page start end
 		//   1    1   10
 		//   2    1   10
@@ -40,6 +45,13 @@ public class PageDto {
 		if(realEnd < endPage) {
 			endPage = realEnd;
 		}
+		
+		
+		//
+		prev = cri.getPage() > 1;
+		next = cri.getPage() < realEnd;
+		doublePrev = startPage > 1;
+		doubleNext = endPage < realEnd;
 	}
 	
 	

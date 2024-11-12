@@ -49,6 +49,6 @@ public class Signup extends HttpServlet {
 		service.register(member);
 
 		// doget으로 보냄
-		resp.sendRedirect("signup");
+		resp.sendRedirect("/signin");
 	}
 }

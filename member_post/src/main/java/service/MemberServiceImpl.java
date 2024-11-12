@@ -1,20 +1,32 @@
 package service;
 //DAO, service, servlet은 mvc2패턴에서 필수적인....
 import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
 import dao.MemberDao;
+import mapper.MemberMapper;
+import mapper.PostMapper;
+import utils.MybatisInit;
 import vo.Member;
 
 public class MemberServiceImpl implements MemberService{
-	private MemberDao memberDao = MemberDao.getInstance(); //하는일이 같을 때는 싱글턴하는게 좋음
+//	private MemberDao memberDao = MemberDao.getInstance(); //하는일이 같을 때는 싱글턴하는게 좋음 - 마이바티스 필요없
 	
 	@Override
 	public int register(Member member) {
-		return memberDao.insert(member);
+		try(SqlSession session = MybatisInit.getInstance().sqlSessionFactory().openSession(true)){//true 한묶음의 트랜젝션으로 처리하겠다.. 아니면 commit 필요
+			MemberMapper mapper = session.getMapper(MemberMapper.class);
+			return mapper.insert(member);
+		}
 	}
 
 	@Override
 	public Member findBy(String id) {
-		return memberDao.selectOne(id);
+		try(SqlSession session = MybatisInit.getInstance().sqlSessionFactory().openSession(true)){
+			MemberMapper mapper = session.getMapper(MemberMapper.class);
+			return mapper.selectOne(id);
+		}
 	}
 
 	@Override

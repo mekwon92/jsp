@@ -28,7 +28,7 @@
 	             	    <button class="btn btn-primary">작성</button>
 	                    <a href="list" class="btn">목록</a>
 	                </div>
-	                <input type="hidden" name="pno" values="${post.pno}">
+	                <input type="hidden" name="pno" value="${post.pno}">
 	            </form>
             </div>
 		</main>

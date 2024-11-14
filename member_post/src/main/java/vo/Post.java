@@ -11,7 +11,6 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-
 public class Post {
 	private final Long pno;
 	private final String title;

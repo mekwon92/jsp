@@ -20,6 +20,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import utils.Commons;
 import vo.Attach;
 
 @WebServlet("/upload")
@@ -30,8 +31,9 @@ public class Upload extends HttpServlet{
 		
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		factory.setSizeThreshold(1024*1024); //인메모리 크기? 버퍼 크기가 1MB
-		factory.setRepository(new File("c:/upload/tmp"));
-		
+		factory.setRepository(new File(Commons.UPLOAD_PATH, "tmp"));
+		// 부모 자식 (/는 os마다 달라서 이렇게 하는거 좋음) new File(Commons.UPLOAD_PATH + File.separator + "tmp") 이라고 써야함
+		// seperate, out 등은 비초기화 final
 		ServletFileUpload upload = new ServletFileUpload(factory);
 		List<Attach> attachs = new ArrayList<>();
 		try {
@@ -49,7 +51,7 @@ public class Upload extends HttpServlet{
 				String uuid = UUID.randomUUID().toString();
 				String realName = uuid + ext;
 				String path = getTodayStr();
-				File parentPath = new File("c:/upload",path);
+				File parentPath = new File(Commons.UPLOAD_PATH,path);
 				if(!parentPath.exists()) {
 					parentPath.mkdirs();
 				}
@@ -62,7 +64,6 @@ public class Upload extends HttpServlet{
 			resp.getWriter().print(new ObjectMapper().writeValueAsString(attachs));
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
 	}

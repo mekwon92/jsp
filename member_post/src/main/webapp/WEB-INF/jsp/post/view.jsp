@@ -62,43 +62,107 @@
 			moment.locale('ko');
 			const pno = '${post.pno}'
 			// replyService.write({content:"abcd"});
-			replyService.list(pno, function(data) {
-				// console.log(data);
-				let str = "";
-				for(let i in data) {
-					str += makeLi(data[i]);
-				}
-				$(".replies").append(str);
-			});
-
 			
+			
+			//목록조회
+			function list() {
+				replyService.list(pno, function(data) {
+					// console.log(data);
+					let str = "";
+					for(let i in data) {
+						str += makeLi(data[i]);
+					}
+					$(".replies").html(str);
+				});				
+			}
+			list();
+
+			// 단일 리스트 문자열 생성
 			function makeLi(reply) {
                 return `<li class="list-group-item" data-rno="\${reply.rno}">
                     <p class="text-black fw-bold mt-3 text-truncate">\${reply.content}</p>
                     <div class="clearfix text-secondary">
                         <span class="float-start">\${reply.writer}</span>
                         <span class="float-end small">\${moment(reply.regdate,'yyyy/MM/DD-HH:mm:ss').fromNow()}</span>
-                        <a class="float-end small text-danger mx-2">삭제</a>
+                        <a class="float-end small text-danger mx-2 btn-reply-remove" href="#">삭제</a>
                     </div>
                 </li>`;
             }
+			// li 클릭시 이벤트 -> 동적.. 이벤트 위임이 필요함
+			$(".replies").on("click", "li", function() {
+				const rno = $(this).data("rno");
+				//console.log($(this).data("rno"))
+				replyService.view(rno, function(data) {
+					$("#replyModal").find(".modal-footer div button").hide()
+					.filter(":gt(0)").show();
+
+					$("#replyModal").data("rno", rno).modal("show");
+					$("#replyContent").val(data.content);
+					$("#replyWriter").val(data.writer);
+					
+					console.log(data);	
+				})
+			});
 			
+			//li .btn-reply-remove 클릭시 이벤트 - 삭제
+			$(".replies").on("click", "li .btn-reply-remove", function() {
+				// event.preventDefault();
+				// event.stopPropagation(); //버블링방지..인데 잘 안먹넴...
+				if(!confirm("삭제 하시겠습니까?")) {
+					return false;
+				}
+				const rno = $(this).closest("li").data("rno");
+				replyService.remove(rno, function(data) {
+					alert("삭제 되었습니다");
+					list();
+				});
+				return false;
+			});
+			
+			// 댓글 쓰기 버튼 클릭시
 			$("#btnWriteReply").click(function() {
+				$("#replyModal").find(".modal-footer div button").hide()
+				.filter(":eq(0)").show();
+				
 				$("#replyModal").modal("show");
+				$("#replyContent").val(""); // 글쓰기 끝나고 사라짐
+				$("#replyWriter").val("${member.id}"); //세션정보 가져오기
 			})
 
-			$(function() {
+			$(function() {		
+				// 댓글 작성(반영) 버튼 클릭시
 				/* $("#replyModal").modal("show") */
 				$("#btnReplyWriteSubmit").click(function() {
 					const writer = $("#replyWriter").val();
 					const content = $("#replyContent").val();
 					const reply = {pno, writer, content};
+					
 					replyService.write(reply, function(data){						
 						$("#replyModal").modal("hide");
-						$("#replyWriter").val("");
-						$("#replyContent").val("");
+						list();
 						
-						/* location.reload(); */
+						// location.reload(); //새로고침
+					});
+				});
+				// 댓글 수정(반영) 버튼 클릭시
+				$("#btnReplyModifySubmit").click(function() {
+					const content = $("#replyContent").val();
+					const rno = $("#replyModal").data("rno");
+					const reply = {rno, content};
+					
+					replyService.modify(reply, function(data){						
+						$("#replyModal").modal("hide");
+						list();
+						
+					});
+				});
+				// 댓글 삭제(반영) 버튼 클릭시
+				$("#btnReplyRemoveSubmit").click(function() {
+					const rno = $("#replyModal").data("rno");
+					
+					replyService.remove(rno, function(data){						
+						$("#replyModal").modal("hide");
+						list();
 					});
 				});
 			})
@@ -129,8 +193,12 @@
 	
 				<!-- Modal footer -->
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnReplyWriteSubmit">Write</button>
-					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+					<div>
+						<button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnReplyWriteSubmit">Write</button>
+						<button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="btnReplyModifySubmit">Modify</button>
+						<button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="btnReplyRemoveSubmit">Remove</button>
+					</div>
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>					
 				</div>
 			</div>
 		</div>

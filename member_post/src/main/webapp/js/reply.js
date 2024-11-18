@@ -3,8 +3,19 @@ const replyService = (function() {
     const url = "/member_post/reply";
     function write(reply, callback) {
         console.log(reply);
-        if(callback)
-            callback();
+        // reply를 JSON화
+        // JSON.stringify(arg) :: obj -> json string
+        // JSON.parse(arg) :: json -> obj
+        const data = JSON.stringify(reply); //보내야할 데이터
+        $.post({
+            url,
+            data
+        })
+        .done(function(data) {
+          /*  console.log(data);*/
+        	if(callback)
+            callback(data);
+        })
     }
 
     function list(pno, callback){
@@ -22,5 +33,30 @@ const replyService = (function() {
         //     }
         // })
     }
-    return {write, list}
+    function view(rno, callback){
+        $.getJSON(url + "/" + rno).done(function(data){
+            if(callback)
+                callback(data);
+        })
+    }
+    function modify(reply, callback) {
+        const data = JSON.stringify(reply);
+        $.ajax(url, {
+            method : 'put',
+            data
+        }).done(function(data) {
+            if(callback)
+                callback(data);
+        })
+    }
+
+    function remove(rno, callback) {
+        $.ajax(url + "/" + rno, {
+            method : 'delete',
+        }).done(function(data) {
+            if(callback)
+                callback(data);
+        })
+    }
+    return {write, list, view, modify, remove}
 })();

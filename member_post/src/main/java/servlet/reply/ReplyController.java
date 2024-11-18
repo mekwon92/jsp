@@ -62,14 +62,14 @@ public class ReplyController extends HttpServlet {
 
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		char[] chs = new char[req.getContentLength()];
-		req.getReader().read(chs);
-		String str = new String(chs);
-		System.out.println(str);
+//		char[] chs = new char[req.getContentLength()]; ->이거는 문자열문제 발생함 \"content\"
+//		req.getReader().read(chs);
+//		String str = new String(chs);
+//		System.out.println(str); 
 		
 //		JsonNode node = mapper.readTree(req.getReader());
-		Reply reply = gson.fromJson(str, Reply.class);
-		System.out.println(reply);
+		Reply reply = gson.fromJson(req.getReader(), Reply.class);
+//		System.out.println(reply);
 		
 		service.modify(reply);
 	

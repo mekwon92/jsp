@@ -2,6 +2,7 @@ package service;
 
 import java.util.List;
 
+import dto.ReplyCri;
 import vo.Reply;
 
 public interface ReplyService {
@@ -15,6 +16,6 @@ public interface ReplyService {
 	
 	Reply findBy(Long rno);
 	
-	List<Reply> list(Long pno);
+	List<Reply> list(Long pno, ReplyCri cri);
 
 }

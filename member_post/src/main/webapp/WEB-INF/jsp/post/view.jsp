@@ -47,6 +47,10 @@
 				<ul class="list-group small replies">
                  
 				</ul>
+				
+				<div class="d-grid my-3">
+					<button class="btn btn-primary btn-block btn-more-reply">댓글 더보기</button>
+				</div>
                 
                 <div class="text-center my-5">
                     <c:if test="${post.writer == member.id}">
@@ -65,8 +69,8 @@
 			
 			
 			//목록조회
-			function list() {
-				replyService.list(pno, function(data) {
+			function list(cri) {
+				replyService.list(pno, cri, function(data) {
 					// console.log(data);
 					let str = "";
 					for(let i in data) {
@@ -129,6 +133,14 @@
 				$("#replyWriter").val("${member.id}"); //세션정보 가져오기
 			})
 
+			// 댓글 더보기 버튼 클릭시
+			$(".btn-more-reply").click(function() {
+				const lastRno = $(".replies li:last").data("rno");
+				//console.log(lastRno);
+				list({lastRno}); // lastRno:lastRno 
+			});
+			
+			
 			$(function() {		
 				// 댓글 작성(반영) 버튼 클릭시
 				/* $("#replyModal").modal("show") */

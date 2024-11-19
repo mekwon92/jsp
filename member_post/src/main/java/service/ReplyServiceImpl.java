@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 
+import dto.ReplyCri;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -57,10 +58,10 @@ public class ReplyServiceImpl implements ReplyService{
 	}
 
 	@Override
-	public List<Reply> list(Long pno) {
+	public List<Reply> list(Long pno, ReplyCri cri) {
 		try(SqlSession session = MybatisInit.getInstance().sqlSessionFactory().openSession(true)){
 			ReplyMapper mapper = session.getMapper(ReplyMapper.class);
-			return mapper.selectList(pno);
+			return mapper.selectList(pno, cri);
 		}
 	}
 }

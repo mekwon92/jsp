@@ -24,6 +24,11 @@
 	</select>
 	
 	<select id="selectList" resultType="vo.Reply">
-	select * from tbl_reply where pno = #{pno}
+	select *
+	from tbl_reply tr
+	where pno = #{pno}
+	and rno > #{cri.lastRno}
+	order by rno
+	limit #{cri.amount}
 	</select>
 </mapper>

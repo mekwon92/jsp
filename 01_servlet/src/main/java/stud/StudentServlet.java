@@ -17,10 +17,11 @@ public class StudentServlet extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.setContentType("text/html; charset=utf-8");
+//		resp.setContentType("text/html; charset=utf-8");
+		
 		PrintWriter pw = resp.getWriter();
 		pw.println("<body>");
-		pw.println("<h1>안녕세상</h1>");		
+		pw.println("<h1>안녕세상aa</h1>");		
 		pw.println("</body>");
 		
 		ByteArrayInputStream bais = new ByteArrayInputStream(new byte[] {10,20,30});

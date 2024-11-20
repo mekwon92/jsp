@@ -15,21 +15,21 @@
 				<h2 class="float-start">Post View</h2>
 			 </div>
 			 <div class="my-3 col-md-9 mx-auto">
-                <label for="title" class="form-label mt-3"><i class="fa-solid fa-t text-primary"></i><b> Title</b></label>
+                <label for="title" class="form-label mt-3"><i class="fa-solid fa-t text-secondary"></i><b> Title</b></label>
                 <input type="text" class="form-control" id="title" placeholder="title" name="title" value="${post.title}" disabled>
 
-                <label for="content" class="form-label mt-3"><i class="fa-solid fa-align-left text-primary"></i><b> Content</b></label>
+                <label for="content" class="form-label mt-3"><i class="fa-solid fa-align-left text-secondary"></i><b> Content</b></label>
                 <textarea class="form-control" id="content" name="content" disabled rows="20">${post.content}</textarea>
 
-                <label for="writer" class="form-label mt-3"><i class="fa-solid fa-user text-primary"></i><b> Writer</b></label>
+                <label for="writer" class="form-label mt-3"><i class="fa-solid fa-user text-secondary"></i><b> Writer</b></label>
                 <input type="text" class="form-control" id="writer" placeholder="writer" name="writer" value="${post.writer}" disabled>
 
-                <label for="regdate" class="form-label mt-3"><i class="fa-solid fa-calendar-days text-primary"></i><b> Register Date</b></label>
+                <label for="regdate" class="form-label mt-3"><i class="fa-solid fa-calendar-days text-secondary"></i><b> Register Date</b></label>
                 <input type="text" class="form-control" id="regdate" placeholder="regdate" name="regdate" value="${post.regdate}" disabled>
 
-                <label for="updatedate" class="form-label mt-3"><i class="fa-solid fa-wrench text-primary"></i><b> Updated Date</b></label>
+                <label for="updatedate" class="form-label mt-3"><i class="fa-solid fa-wrench text-secondary"></i><b> Updated Date</b></label>
                 <input type="text" class="form-control" id="updatedate" placeholder="updatedate" name="updatedate" value="${post.updatedate}" disabled>
-                <label class="form-label mt-3"><i class="fa-solid fa-paperclip text-primary"></i><b> Attach</b><br></label><br>
+                <label class="form-label mt-3"><i class="fa-solid fa-paperclip text-secondary"></i><b> Attach</b><br></label><br>
                 <!-- readonly는 서버로 보내짐 disabled와 차이가 있음 -->
 				<%-- ${post} --%>
 				<ul class="list-group attach-result">
@@ -40,9 +40,26 @@
 					<li class="list-group-item"><a href="${cp}download?uuid=${a.uuid}&origin=${a.origin}&path=${a.path}">${a.origin}</a></li>			
 				</c:forEach>
 				</ul>
+				
+				<!-- 내 댓글 -->
 				<div class="clearfix mt-3 mb-2">
-                <label class="form-label float-start"><i class="fa-brands fa-replyd text-primary"></i><b> Reply</b></label>
-				<button type="button" class="btn btn-primary float-end btn-sm" id="btnWriteReply">write reply</button>
+                	<label class="form-label float-start"><i class="fa-brands fa-replyd text-warning"></i><b> My Reply</b></label>
+				</div>
+				<ul class="list-group small my-replies my-2" >
+                 	<li class="list-group-item" data-rno="8">
+	                    <p class="text-black fw-bold mt-3 text-truncate">댓글</p>
+	                    <div class="clearfix text-secondary">
+	                        <span class="float-start">abcd</span>
+	                        <span class="float-end small">5일 전</span>
+	                        <a class="float-end small text-danger mx-2 btn-reply-remove" href="#">삭제</a>
+	                    </div>
+                	</li>
+				</ul>
+				
+				<!-- 전체댓글 구간 -->
+				<div class="clearfix mt-3 mb-2">
+                	<label class="form-label float-start"><i class="fa-brands fa-replyd text-secondary"></i><b> Reply</b></label>
+					<button type="button" class="btn btn-primary float-end btn-sm" id="btnWriteReply">write reply</button>
 				</div>
 				<ul class="list-group small replies">
                  
@@ -69,14 +86,34 @@
 			
 			
 			//목록조회
-			function list(cri) {
+			function list(cri, myOnly) {
 				replyService.list(pno, cri, function(data) {
-					// console.log(data);
-					let str = "";
-					for(let i in data) {
-						str += makeLi(data[i]);
+					if(!data.list.length) {
+						$(".btn-more-reply")
+						.prop("disabled",true)
+						.text("댓글이 없습니다")
+						.removeClass("btn-primary")
+						.addClass("btn-secondary");
+						return;
 					}
-					$(".replies").html(str);
+					let myStr = "";					
+					for(let i in data.myList) {
+						myStr += makeLi(data.myList[i]);
+					}
+					$(".my-replies").html(myStr);
+					//추가 css 작업(다크모드 적용시)
+					//$(".my-replies .text-secondary, my-replies .text-black").removeClass("text-secondary text-black");
+					
+					if(myOnly) return;
+					
+					let str = "";
+					for(let i in data.list) {
+						str += makeLi(data.list[i]);
+					}
+					
+	
+					$(".replies").append(str);
+					
 				});				
 			}
 			list();
@@ -92,8 +129,10 @@
                     </div>
                 </li>`;
             }
+			
+			
 			// li 클릭시 이벤트 -> 동적.. 이벤트 위임이 필요함
-			$(".replies").on("click", "li", function() {
+			$(".replies, .my-replies").on("click", "li", function() {
 				const rno = $(this).data("rno");
 				//console.log($(this).data("rno"))
 				replyService.view(rno, function(data) {
@@ -109,16 +148,18 @@
 			});
 			
 			//li .btn-reply-remove 클릭시 이벤트 - 삭제
-			$(".replies").on("click", "li .btn-reply-remove", function() {
+			$(".replies, .my-replies").on("click", "li .btn-reply-remove", function() {
 				// event.preventDefault();
 				// event.stopPropagation(); //버블링방지..인데 잘 안먹넴...
 				if(!confirm("삭제 하시겠습니까?")) {
 					return false;
 				}
-				const rno = $(this).closest("li").data("rno");
+				const $li = $(this).closest("li");
+				const rno = $li.data("rno");
 				replyService.remove(rno, function(data) {
 					alert("삭제 되었습니다");
-					list();
+					$li.remove();
+					list(undefined, true);
 				});
 				return false;
 			});
@@ -151,7 +192,8 @@
 					
 					replyService.write(reply, function(data){						
 						$("#replyModal").modal("hide");
-						list();
+						list(undefined, true);
+
 						
 						// location.reload(); //새로고침
 					});
@@ -164,17 +206,20 @@
 					
 					replyService.modify(reply, function(data){						
 						$("#replyModal").modal("hide");
-						list();
+						$(`.replies li[data-rno='\${rno}'] p`).text(content);
+						list(undefined, true);
+						//수정시간까지 변경하고싶으면 db에서 갖고와야됨. 여기선 content는 알고있으니까,,,
 						
 					});
 				});
 				// 댓글 삭제(반영) 버튼 클릭시
 				$("#btnReplyRemoveSubmit").click(function() {
 					const rno = $("#replyModal").data("rno");
-					
+					const $li = $(`.replies li[data-rno='\${rno}']`);
 					replyService.remove(rno, function(data){						
 						$("#replyModal").modal("hide");
-						list();
+						$li.remove();
+						list(undefined, true);
 					});
 				});
 			})

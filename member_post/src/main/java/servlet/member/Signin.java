@@ -43,13 +43,12 @@ public class Signin extends HttpServlet{
 			//세션이 로그인 동안 유지되도록(무조건 진행)
 			HttpSession session = req.getSession();
 			session.setAttribute("member", service.findBy(id));
-			//req.getContextPath()+"/" 이것은 프로젝트이름 /member 을 기대하는 것
 			
 			//쿠키에 아이디 기억 여부 처리
 			if(remember != null) {
 				Cookie cookie = new Cookie("remember-id",id);
 				cookie.setMaxAge(60 * 60 * 24 * 7);
-				resp.addCookie(cookie);				
+				resp.addCookie(cookie);
 			}
 			else {
 				// 아이디 기억 안할 때 처리할 일
@@ -64,10 +63,13 @@ public class Signin extends HttpServlet{
 			}	
 			//url 파라미터 여부에 따른 리디렉션 페이지 지정
 			String redirectURL = req.getContextPath()+"/index"; 
+			//req.getContextPath()+"/" 이것은 프로젝트이름 /member 을 기대하는 것
+			
 			String url = req.getParameter("url");
 			if(url != null && !url.equals("")) {
 				redirectURL = URLDecoder.decode(url, "utf-8");
 			}
+			
 			resp.sendRedirect(redirectURL); 
 		}
 		//로그인 실패

@@ -83,7 +83,11 @@ public class Criteria {
 		return String.join("&", strs);
 	}
 	
+	public String[] getTypeArr() {
+		return type.split("");
+	}
+	
 	public static void main(String[] args) {
-		System.out.println(new Criteria().getQs());
+//		System.out.println(new Criteria().getQs());
 	}
 }

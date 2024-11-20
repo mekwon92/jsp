@@ -31,4 +31,13 @@
 	order by rno
 	limit #{cri.amount}
 	</select>
+	
+	<select id="selectListByMe" resultType="vo.Reply">
+	select *
+	from tbl_reply tr 
+	where writer = #{writer}
+	and pno = #{pno}
+	order by rno desc
+	limit 3
+	</select>
 </mapper>

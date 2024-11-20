@@ -21,5 +21,6 @@ public class Reply {
 	private String writer;
 	private Long pno;
 	
+	
 
 }

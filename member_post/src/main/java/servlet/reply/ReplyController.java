@@ -58,7 +58,7 @@ public class ReplyController extends HttpServlet {
 //				pno = Long.valueOf(uri.substring(tmpIdx+1));
 				
 			}
-			ret = service.list(pno, cri); //마이바티스에서 해석가능하도록 cri도 보내주기
+			ret = service.list(pno, cri, req.getSession().getAttribute("member")); //마이바티스에서 해석가능하도록 cri도 보내주기
 		}
 		else { //단일조회
 			Long rno = Long.valueOf(uri);

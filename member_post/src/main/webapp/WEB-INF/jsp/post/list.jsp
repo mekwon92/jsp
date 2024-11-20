@@ -30,6 +30,39 @@
 				 <h2 class="float-start">Post List</h2>
 			 	<a href="write?${pageDto.cri.qs2}" class="btn btn-primary float-end">글쓰기</a>
 			 </div>
+			 <form>
+				<input type="hidden" name="page" value="${pageDto.cri.page}">
+				<input type="hidden" name="category" value="${pageDto.cri.category}">
+				<div class="row my-3">
+					 <div class="col-2">
+						 <select class="form-select" name="type">
+						  <option ${pageDto.cri.type == "T" ? 'selected' : ''} value="T">title</option>
+						  <option ${pageDto.cri.type == "C" ? 'selected' : ''} value="C" selected>content</option>
+						  <option ${pageDto.cri.type == "W" ? 'selected' : ''} value="W">writer</option>
+						  <option ${pageDto.cri.type == "TC" ? 'selected' : ''} value="TC">title+content</option>
+						  <option ${pageDto.cri.type == "TW" ? 'selected' : ''} value="TW">title+writer</option>
+						  <option ${pageDto.cri.type == "CW" ? 'selected' : ''} value="CW">content+writer</option>
+						  <option ${pageDto.cri.type == "TCW" ? 'selected' : ''} value="TCW">title+content+writer</option>
+						</select>
+					 </div>
+					 <div class="col-4"> 
+					 <!-- md lg 등도 고려해야함 -->
+						<div class="input-group mb-3">
+							<input type="text" class="form-control" placeholder="Search" name="keyword" value="${pageDto.cri.keyword}">
+							<button type="submit" class="btn btn-primary">search</button>
+						</div>
+					 </div>
+					 <div class="col-4"></div>
+					 <div class="col-2 float-end">
+						 <select class="form-select" name="amount">
+						  <option value="10" ${pageDto.cri.amount == 10 ? 'selected' : ''}>10개씩 보기</option>
+						  <option value="20" ${pageDto.cri.amount == 20 ? 'selected' : ''}>20개씩 보기</option>
+						  <option value="30" ${pageDto.cri.amount == 30 ? 'selected' : ''}>30개씩 보기</option>
+						  <option value="50" ${pageDto.cri.amount == 50 ? 'selected' : ''}>50개씩 보기</option>
+						</select>
+					 </div> 	
+				 </div>
+			 </form>
 	            <table class="table table-hover text-center" style="table-layout: fixed;">
 	                <thead>
 	                <tr>
@@ -44,6 +77,7 @@
 	                <c:forEach items="${posts}" var="p">
 	                <tr>
 	                    <td>${p.pno}</td>
+	                    
 	                    <td class="text-truncate text-start"><a href="view?pno=${p.pno}&${pageDto.cri.qs2}" class="text-decoration-none">${p.title}</a>
 	                    <c:if test="${p.attachFlag}"><i class="fa-solid fa-paperclip text-primary"></i></c:if>
 	                    <td>${p.writer}</td>

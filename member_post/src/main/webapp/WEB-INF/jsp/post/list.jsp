@@ -36,6 +36,7 @@
 				<div class="row my-3">
 					 <div class="col-2">
 						 <select class="form-select" name="type">
+
 						  <option ${pageDto.cri.type == "T" ? 'selected' : ''} value="T">title</option>
 						  <option ${pageDto.cri.type == "C" ? 'selected' : ''} value="C" selected>content</option>
 						  <option ${pageDto.cri.type == "W" ? 'selected' : ''} value="W">writer</option>
